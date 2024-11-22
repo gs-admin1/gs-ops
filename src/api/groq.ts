@@ -23,7 +23,7 @@ export async function groqChat(request: string) {
 
     return aiMessage;
   } catch (error) {
-    console.error("Error calling Groq API: ", error);
+    console.error("Error calling Groq API:", error);
     return "Error calling Groq API";
   }
 }  
