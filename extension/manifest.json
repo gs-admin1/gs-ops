@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "My extension",
+    "description": "Base Level Extension",
+    "version": "1.0",
+
+    "action": {
+        "default_title": "Click to open panel"
+    },
+
+    "permissions": [
+      "sidePanel",
+      "activeTab"
+    ],
+
+    "side_panel": {
+        "default_path": "index.html"
+    },
+
+    "background": {
+        "service_worker": "service-worker.js"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ]
+  }
