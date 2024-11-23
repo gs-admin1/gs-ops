@@ -10,10 +10,10 @@ import {
 import { ScrollArea } from './ui/scroll-area'
 import { Textarea } from './ui/textarea'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible'
-import { groqChat } from '@/api/groq'
+//import { groqChat } from '@/api/groq'
 import { openAiChat } from '@/api/openai'
-import { claudeChat } from '@/api/claude'
-import { openAiAssistant } from '@/api/openaiassistant'
+//import { claudeChat } from '@/api/claude'
+//import { openAiAssistant } from '@/api/openaiassistant'
 
 export default function SupportSidebar() {
   const [currentProject, setCurrentProject] = useState('AWS RDS Issue #1234')
@@ -53,15 +53,15 @@ export default function SupportSidebar() {
       setIsLoading(true)
 
       //const data = await groqChat(userInput)
-      //const data = await openAiChat(userInput)
+      const data = await openAiChat(userInput)
       //const data = await openAiAssistant(userInput)
-      const data = await claudeChat(userInput)
+      //const data = await claudeChat(userInput)
       // const samp = {type: 'text', text: 'Here are a few different ways to print numbers fro…he range of numbers or add additional operations.'};
       // console.log(JSON.stringify(samp));
 
       console.log('data: ', data);
 
-      //setAiResponse(data || 'No response')
+      setAiResponse(data || 'No response')
     } catch (error) {
       console.error('Error:', error)
       setAiResponse('Error getting response')
