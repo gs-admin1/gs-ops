@@ -16,6 +16,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 export function SupportSidebar() {
   const [currentProject, setCurrentProject] = React.useState('AWS RDS Issue #1234')
   const [isNotesExpanded, setIsNotesExpanded] = React.useState(true)
+
+  const [userInput, setUserInput] = React.useState('')
+  const [aiResponse, setAiResponse] = React.useState('')
+  const [isLoading, setIsLoading] = React.useState(false)
   
   const recentCases = [
     { id: '1234', title: 'RDS Performance Issue #1234', type: 'RDS' },
@@ -41,6 +45,27 @@ export function SupportSidebar() {
     { icon: History, label: 'History' },
     { icon: Plus, label: 'Add' },
   ]
+
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true)
+
+      const response = await fetch("/api/groq", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userInput }),
+      });
+      const data = await response.json();
+      console.log(data)
+
+      setAiResponse(data.response || 'No response received')
+    } catch (error) {
+      console.error('Error:', error)
+      setAiResponse('Error getting response')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex h-screen w-full flex-col bg-slate-950 text-slate-50 lg:flex-row">
@@ -161,6 +186,20 @@ export function SupportSidebar() {
             <Textarea
               placeholder="Enter your content..."
               className="flex-1 resize-none bg-slate-900 text-slate-50 placeholder:text-slate-400"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+            />
+            <Button 
+              onClick={handleSubmit}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : 'Send'}
+              <Send className="ml-2 h-4 w-4" />
+            </Button>
+            <Textarea 
+              placeholder="AI Response..."
+              value={aiResponse}
+              readOnly
             />
 
             {/* Collapsible Notes */}
