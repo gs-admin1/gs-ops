@@ -5,6 +5,11 @@ chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));
 
+// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+//     if (message.type === 'PAGE_CONTENT_FETCHED') {
+//       chrome.tabs.create({ url: 'https://google.com' });
+//     }
+// });
 // // service-worker.js
 // let articles = [];
 

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ChevronDown, ClipboardCheck, Code, MessageSquare, RotateCcw, Search, Send, Plus, FileText, Mail, AlertTriangle, HelpCircle, Scissors, Link, Book, History, ChevronUp } from 'lucide-react'
 import { Button } from './ui/button'
 import {
@@ -13,10 +12,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collap
 //import { groqChat } from '@/api/groq'
 import { openAiChat } from '@/api/openai'
 //import { claudeChat } from '@/api/claude'
-//import { openAiAssistant } from '@/api/openaiassistant'
+import { openAiAssistant } from '@/api/openaiassistant'
+import { useState } from 'react'
 
 export default function SupportSidebar() {
-  const [currentProject, setCurrentProject] = useState('AWS RDS Issue #1234')
+  const [currentProject, setCurrentProject] = useState('Your current project will show here')
   const [isNotesExpanded, setIsNotesExpanded] = useState(true)
 
   const [userInput, setUserInput] = useState('')
@@ -51,17 +51,45 @@ export default function SupportSidebar() {
   const handleSubmit = async () => {
     try {
       setIsLoading(true)
+      setAiResponse('')
+      //chrome.runtime.sendMessage({ type: 'THREAD', content: 'Empty' });
+
+      // chrome.storage.local.set({ key: "thread_R2hGv6NXESlxzM5IUsQtB8p7" }).then(() => {
+      //   console.log("Thread is set");
+      // });
+      
+      // chrome.storage.local.get(["key"]).then((result) => {
+      //   console.log("Thread is retrieved: " + result.key);
+      // });
 
       //const data = await groqChat(userInput)
-      const data = await openAiChat(userInput)
+      //const data = await openAiChat(userInput)
       //const data = await openAiAssistant(userInput)
       //const data = await claudeChat(userInput)
       // const samp = {type: 'text', text: 'Here are a few different ways to print numbers fro…he range of numbers or add additional operations.'};
       // console.log(JSON.stringify(samp));
 
-      console.log('data: ', data);
+      // console.log('data: ', data);
+      // const aiResponse = data[0].content[0]?.text.value;
 
-      setAiResponse(data || 'No response')
+      // setAiResponse(aiResponse || 'No response')
+      //setAiResponse(data || 'No response')
+
+      let title = 'create a title for the following query (respond with only the title and nothing else): ';
+      const getTitle = await openAiChat(title+=userInput);
+      console.log('getTitle: ', getTitle);
+      setCurrentProject(getTitle || 'No title');
+
+      let response = '';
+      const data = openAiAssistant(userInput)
+      for await (const res of data) {
+        if (res !== undefined) {
+          console.log('Received response:', res);
+          response += res;
+          console.log('Response:', response);
+          setAiResponse(response || 'No response');
+        }
+      }
     } catch (error) {
       console.error('Error:', error)
       setAiResponse('Error getting response')
@@ -230,6 +258,7 @@ export default function SupportSidebar() {
             </Button>
 
             <Textarea 
+              className="flex-1 resize-none bg-slate-900 text-slate-50 placeholder:text-slate-400"
               placeholder="AI Response..."
               value={aiResponse}
               readOnly
