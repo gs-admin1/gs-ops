@@ -10,7 +10,8 @@
 
     "permissions": [
       "sidePanel",
-      "activeTab"
+      "activeTab",
+      "storage"
     ],
 
     "side_panel": {

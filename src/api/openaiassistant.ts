@@ -5,7 +5,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true 
 })
 
-export async function openAiAssistant(request: String) {
+export async function* openAiAssistant(request: String) {
   try {
     console.log('request: ', request);
 
@@ -13,16 +13,36 @@ export async function openAiAssistant(request: String) {
       return "Please provide a message";
     }
 
+  //   const stream = await openai.beta.threads.createAndRun({
+  //     assistant_id: "asst_V8TGvV8uGOG6mMXxkxLqfKec",
+  //     thread: {
+  //       messages: [
+  //         { role: "user", content: "what is a crm?" },
+  //       ],
+  //     },
+  //     stream: true
+  // });
+
+  // for await (const event of stream) {
+  //   console.log('events ', event);
+  // }
+
     // First create a thread
-      const thread = await openai.beta.threads.create();
+    const thread = await openai.beta.threads.create();
+
+      // const thread = await openai.beta.threads.retrieve(
+      //   "thread_R2hGv6NXESlxzM5IUsQtB8p7"
+      // );
+    
+      console.log(thread);
 
       // Then create a message in the thread
       const message = await openai.beta.threads.messages.create(
         thread.id,
         {
         role: "user",
-        content: `Context: "You are a CRM assistant helping a user with their CRM data. The user has asked you to help them with a specific task. You should provide a helpful response to the user's request."
-                  User Message: ${request}`
+        // 
+        content: `${request}`
         }
       );
 
@@ -30,31 +50,33 @@ export async function openAiAssistant(request: String) {
       const run = await openai.beta.threads.runs.create(
         thread.id,
         {
-        assistant_id: "asst_V8TGvV8uGOG6mMXxkxLqfKec" // Your assistant ID here
+        assistant_id: "asst_V8TGvV8uGOG6mMXxkxLqfKec", stream: true// Your assistant ID here
         }
       );
 
-      // Wait for the run to complete
-      const runStatus = await openai.beta.threads.runs.retrieve(
-        thread.id,
-        run.id
-      );
+      for await (const event of run) {
+        console.log(event);
+        const res = (event as any).data.delta?.content[0].text.value;
+        console.log('res: ', res);
+        yield res;
+      }
 
+      console.log('run: ', run);
+
+      console.log('thread: ', thread.id);
       const messages = openai.beta.threads.messages.list(thread.id);
-      console.log('messages: ', (await messages).data);
+      const aiMessage = (await messages).data;
+      console.log('response: ', aiMessage);
 
       const mesg = await openai.beta.threads.messages.retrieve(
         thread.id,
         message.id
       );
-      console.log('message: ', mesg);
+      console.log('query: ', mesg.content[0])
 
-    const aiMessages = openai.beta.threads.messages.list(thread.id);
-    console.log('messages: ', runStatus);
-
-    return aiMessages;
+    //return aiMessage;
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
-    return "Error calling OpenAI API";
+    yield "Error calling OpenAI API";
   }
 }
