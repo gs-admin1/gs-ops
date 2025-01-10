@@ -42,6 +42,7 @@ function UserLogin() {
       <Button
         variant="ghost" 
         className="bg-slate-900 hover:bg-slate-900/90"
+        title="Login to Maverick.Ai"
         onClick={handleLogin}>
         Login
       </Button>

@@ -119,7 +119,7 @@ export default function SupportSidebar() {
       <div className='max-w-7xl mx-auto flex flex-col flex-1 border border-slate-800 my-1 overflow-hidden'>
       {/* Project Selector */}
       <div className="border-b border-slate-800 p-2 flex items-center justify-between mx-2">
-        <div>
+        <div className='flex items-center justify-between gap-1'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -141,6 +141,13 @@ export default function SupportSidebar() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <Button
+        size="icon"
+        variant="ghost"
+        className="h-8 w-8 rounded-full bg-slate-800 hover:bg-slate-800/90 flex-shrink-0"
+        title="Add Project">
+          <Plus className="h-6 w-6" />
+        </Button>  
         </div>
         <div className='flex items-center justify-between gap-2'>
           <UserLogin />
