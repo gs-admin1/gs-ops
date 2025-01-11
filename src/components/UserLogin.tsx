@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription } from "./ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 
 function UserLogin() {
@@ -23,6 +23,7 @@ function UserLogin() {
 
   function handleContinue() {
     setShouldOpenDialog(false);
+    chrome.runtime.sendMessage({ type: 'LOGIN'});
     console.log("Continue button clicked");
     console.log("shouldOpenDialog: ", shouldOpenDialog);
   }
@@ -42,6 +43,7 @@ function UserLogin() {
       <Button
         variant="ghost" 
         className="bg-slate-900 hover:bg-slate-900/90"
+        title="Login to Maverick.Ai"
         onClick={handleLogin}>
         Login
       </Button>
@@ -51,7 +53,7 @@ function UserLogin() {
           <AlertDialogHeader>
             <AlertDialogTitle>Login</AlertDialogTitle>
             <AlertDialogDescription>
-              Please login to use Maverick.Ai
+              Please login to use Maverick.Ai. This will open a new tab for login.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -16,6 +16,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'LOGIN') {
+    chrome.tabs.create({ url: 'https://google.com' });
+  }
+});
+
 // let pageContent = '';
 
 // chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

@@ -1,4 +1,4 @@
-import { ChevronDown, ClipboardCheck, Code, MessageSquare, RotateCcw, Search, Send, Plus, FileText, Mail, AlertTriangle, HelpCircle, Scissors, Link, Book, History, ChevronUp, Presentation, SquareUserRound } from 'lucide-react'
+import { ChevronDown, ClipboardCheck, Code, MessageSquare, RotateCcw, Search, Send, Plus, FileText, Mail, AlertTriangle, HelpCircle, Scissors, Link, Book, History, ChevronUp, SquareUserRound } from 'lucide-react'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
@@ -15,12 +15,13 @@ import { openAiChat } from '@/api/openai'
 import { openAiAssistant } from '@/api/openaiassistant'
 import { useState } from 'react'
 import UserLogin from './UserLogin'
+import MeetDialog from './MeetDialog'
 
 export default function SupportSidebar() {
   const [currentProject, setCurrentProject] = useState('Your current project will show here')
   const [isNotesExpanded, setIsNotesExpanded] = useState(true)
 
-  const [openDialog, setOpenDialog] = useState(false);
+  //const [openDialog, setOpenDialog] = useState(false);
 
   const [userInput, setUserInput] = useState('')
   const [aiResponse, setAiResponse] = useState('')
@@ -111,15 +112,15 @@ export default function SupportSidebar() {
   }
 
   const login = () => {
-    setOpenDialog(true);
+    //setOpenDialog(true);
   }
 
   return (
-    <div className="flex h-max w-full flex-col bg-slate-950 text-slate-50 overflow-hidden">
+    <div className="flex h-max w-full min-w-fit flex-col bg-slate-950 text-slate-50 overflow-hidden">
       <div className='max-w-7xl mx-auto flex flex-col flex-1 border border-slate-800 my-1 overflow-hidden'>
       {/* Project Selector */}
       <div className="border-b border-slate-800 p-2 flex items-center justify-between mx-2">
-        <div>
+        <div className='flex items-center justify-between gap-1'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -141,6 +142,13 @@ export default function SupportSidebar() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <Button
+        size="icon"
+        variant="ghost"
+        className="h-8 w-8 rounded-full bg-slate-800 hover:bg-slate-800/90 flex-shrink-0"
+        title="Add Project">
+          <Plus className="h-6 w-6" />
+        </Button>  
         </div>
         <div className='flex items-center justify-between gap-2'>
           <UserLogin />
@@ -182,13 +190,17 @@ export default function SupportSidebar() {
         </Button>
       </div>
 
-      <Button
+      {/* <Button
           variant="ghost"
           className="m-4 flex h-24 flex-col items-center justify-center gap-2 bg-slate-900 hover:bg-slate-900/90"
         >
           <Presentation className="h-6 w-6" />
           <span>Join Meeting</span>
-      </Button>
+      </Button> */}
+      
+      <div className="flex h-24 flex-col items-center justify-center gap-2">
+        <MeetDialog />
+      </div>
 
       {/* Recent Cases */}
       <div className="p-4">
